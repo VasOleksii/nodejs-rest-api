@@ -20,6 +20,11 @@ const contactShema = Joi.object({
       "any.required": `missing required phone field`,
     })
     .required(),
+  favorite: Joi.boolean()
+    .messages({
+      "any.required": `missing required favorite field`,
+    })
+    .required(),
 });
 
 module.exports = {
