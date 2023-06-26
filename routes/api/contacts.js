@@ -6,9 +6,10 @@ const {
   addContact,
   removeContact,
   updateContact,
+  updateStatusContact,
 } = require("../../controlers/contacts/contacts");
 
-const { validateContact } = require("../../middlewares");
+const { validateContact, checkUser } = require("../../middlewares");
 const { contactShema } = require("../../shemas/contactValidationShema");
 
 const router = express.Router();
@@ -22,5 +23,7 @@ router.post("/", validateContact(contactShema), addContact);
 router.delete("/:contactId", removeContact);
 
 router.put("/:contactId", validateContact(contactShema), updateContact);
+
+router.patch("/:contactId/favorite", checkUser, updateStatusContact);
 
 module.exports = router;
