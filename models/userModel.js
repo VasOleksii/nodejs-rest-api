@@ -1,27 +1,42 @@
 const mongoose = require("mongoose");
+const { handleMongooseError } = require("../helpers");
+const Joi = require("joi");
 
-const contactSchema = mongoose.Schema(
+const { emailRegexp } = require("../constans/regExpr");
+const { subscriptionType } = require("../constans/subscriptionType");
+
+const userSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Set name for contact"],
+      required: true,
+    },
+    password: {
+      type: String,
+      minlength: 6,
+      required: [true, "Password is required"],
     },
     email: {
       type: String,
-      required: true,
+      match: emailRegexp,
+      required: [true, "Email is required"],
+      unique: true,
     },
-    phone: {
+    subscription: {
       type: String,
-      required: true,
+      enum: Object.values(subscriptionType),
+      default: subscriptionType.STARTER,
     },
-    favorite: {
-      type: Boolean,
-      default: false,
+    token: {
+      type: String,
+      default: null,
     },
   },
   { versionKey: false, timestamps: true }
 );
 
-const Contact = mongoose.model("contact", contactSchema);
+userSchema.post("save", handleMongooseError);
 
-module.exports = Contact;
+const User = mongoose.model("user", userSchema);
+
+module.exports = { User };

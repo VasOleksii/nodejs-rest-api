@@ -1,32 +1,31 @@
 const Joi = require("joi");
+const { emailRegexp, phoneRegexp } = require("../constans/regExpr");
 
-const contactShema = Joi.object({
+const contactSchema = Joi.object({
   name: Joi.string()
     .min(2)
     .max(15)
     .messages({ "any.required": `missing required name field` })
     .required(),
   email: Joi.string()
-    .email()
+    .pattern(emailRegexp)
     .messages({
       "any.required": `missing required email field`,
     })
     .required(),
   phone: Joi.string()
-    .pattern(/^\+?[0-9 ()-]{3,}$/)
+    .pattern(phoneRegexp)
     .min(5)
     .max(15)
     .messages({
       "any.required": `missing required phone field`,
     })
     .required(),
-  favorite: Joi.boolean()
-    .messages({
-      "any.required": `missing required favorite field`,
-    })
-    .required(),
+  favorite: Joi.boolean().messages({
+    "any.required": `missing required favorite field`,
+  }),
 });
 
 module.exports = {
-  contactShema,
+  contactSchema,
 };
