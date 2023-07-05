@@ -6,18 +6,19 @@ const {
   current,
   logout,
   updateSubscription,
+  updateAvatar,
 } = require("../../controlers/users/auth");
 
 const validateBody = require("../../middlewares/validateBody");
 
 const { schemas } = require("../../shemas/userSchemas");
-const { authenticate } = require("../../middlewares");
+const { authenticate, upload } = require("../../middlewares");
 
 const router = express.Router();
 
 router.post(
   "/signup",
-  authenticate,
+  upload.single("avatar"),
   validateBody(schemas.registerSchema),
   signup
 );
@@ -34,5 +35,7 @@ router.patch(
   validateBody(schemas.updateSubscriptionSchema),
   updateSubscription
 );
+
+router.patch("/avatars", authenticate, upload.single("avatar"), updateAvatar);
 
 module.exports = router;
