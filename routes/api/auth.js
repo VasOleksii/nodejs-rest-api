@@ -7,6 +7,8 @@ const {
   logout,
   updateSubscription,
   updateAvatar,
+  verifyEmail,
+  resendVerifyEmail,
 } = require("../../controlers/users/auth");
 
 const validateBody = require("../../middlewares/validateBody");
@@ -21,6 +23,14 @@ router.post(
   upload.single("avatar"),
   validateBody(schemas.registerSchema),
   signup
+);
+
+router.get("/verify/:verificationToken", verifyEmail);
+
+router.post(
+  "/verify",
+  validateBody(schemas.verifyEmailSchema),
+  resendVerifyEmail
 );
 
 router.post("/login", validateBody(schemas.loginSchema), login);
